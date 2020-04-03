@@ -23,7 +23,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -47,4 +47,3 @@ jobs:
       with: 
         app-name: ${{ env.WEB_APP_NAME }}
         slot-name: ${{ env.SLOT_NAME }}
-        package: './site'
