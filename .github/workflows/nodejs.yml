@@ -3,6 +3,13 @@
 
 name: Node.js CI
 
+env:
+  RESOURCE_GROUP: gh-webapp
+  LOCATION: centralus
+  PLAN_NAME: ASP-ghwebapp-b3af
+  WEB_APP_NAME: menz-gh
+  SLOT_NAME: staging
+
 on:
   push:
     branches: [ master ]
@@ -29,3 +36,15 @@ jobs:
     - run: npm test
       env:
         CI: true
+
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: 'Deploy to slot'
+      uses: azure/webapps-deploy@v2
+      with: 
+        app-name: ${{ env.WEB_APP_NAME }}
+        slot-name: ${{ env.SLOT_NAME }}
+        package: './site'
