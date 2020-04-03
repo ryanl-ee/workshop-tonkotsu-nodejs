@@ -32,5 +32,5 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
     - name: Swap slots
-          run: |
-            az webapp deployment slot swap -g '${{ env.RESOURCE_GROUP }}' -n '${{ env.WEB_APP_NAME }}' --slot '${{ env.SLOT_1_NAME }}' --target-slot '${{ env.SLOT_2_NAME }}'
+      run: |
+        az webapp deployment slot swap -g '${{ env.RESOURCE_GROUP }}' -n '${{ env.WEB_APP_NAME }}' --slot '${{ env.SLOT_1_NAME }}' --target-slot '${{ env.SLOT_2_NAME }}'
