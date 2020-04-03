@@ -11,8 +11,6 @@ env:
   SLOT_NAME: staging
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
