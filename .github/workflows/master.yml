@@ -8,10 +8,11 @@ env:
   LOCATION: centralus
   PLAN_NAME: ASP-ghwebapp-b3af
   WEB_APP_NAME: menz-gh
-  SLOT_NAME: staging
-
+  SLOT_1_NAME: staging
+  SLOT_2_NAME: production
+  
 on:
-  pull_request:
+  push:
     branches: [ master ]
 
 jobs:
@@ -24,24 +25,12 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-      env:
-        CI: true
 
     - name: 'Login via Azure CLI'
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-    - name: 'Deploy to slot'
-      uses: azure/webapps-deploy@v2
-      with: 
-        app-name: ${{ env.WEB_APP_NAME }}
-        slot-name: ${{ env.SLOT_NAME }}
+    - name: Swap slots
+      run: |
+        az webapp deployment slot swap -g '${{ env.RESOURCE_GROUP }}' -n '${{ env.WEB_APP_NAME }}' --slot '${{ env.SLOT_1_NAME }}' --target-slot '${{ env.SLOT_2_NAME }}'
